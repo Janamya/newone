@@ -1,23 +1,31 @@
+name: CI for Trello E2E Frontend Tests
 
-name: build-test
-
-on: push
-
+on:
+  push:
+    branches:
+      - development
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
-    
       - uses: browser-actions/setup-chrome@latest
-      
-      - uses: actions/checkout@v3
-      - name: Setup Node 16.x
-        uses: actions/setup-node@v3
+      - run: chrome --version
+        # You fetch the current ref
+      - uses: actions/checkout@v2
+
+      # Use Node version above 14.x you want to use
+      - name: Use Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 16.x
-          cache: npm
-      - run: npm ci
-      - run: npm run test:local
+
+      # Install your dependencies (with yarn, npm no matter)
+      - run: yarn install
+        name: Install dependencies
+
+      # This is where you could build your app
+      # You could also start your server process (take a look at https://github.com/Slashgear/slashgear.github.io/blob/source/.github/workflows/continuous-integration.yml)
+
+      # Run your test with the same command you uses locally
+      - run: yarn wdio run wdio.conf.js
+        name: Running E2E tests

@@ -1,4 +1,3 @@
-const { isExportDeclaration } = require("typescript");
 const AbstractPage = require("./AbstractPage");
 
 class CreateBoardPage extends AbstractPage {
